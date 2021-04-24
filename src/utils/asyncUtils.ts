@@ -1,6 +1,6 @@
 type DelayFn = (time: number) => Promise<undefined>
 
-const delay: DelayFn = time => {
+export const delay: DelayFn = (time = 1000) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve()

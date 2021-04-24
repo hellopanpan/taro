@@ -1,11 +1,17 @@
 import { Component } from 'react'
 import { Provider } from 'react-redux'
 
-import configStore from './store'
+/* dva */
+import dva from './utils/dva'
+import models from './models/index'
 
 import './app.scss'
 
-const store = configStore()
+const dvaApp = dva.createApp({
+  initialState: {},
+  models: models,
+})
+const store = dvaApp.getStore()
 
 class App extends Component {
 

@@ -1,8 +1,7 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Button, Text } from '@tarojs/components'
-
-import { add, minus, asyncAdd } from '../../actions/counter'
+import { ConnectState, ConnectProps } from '../../models/connect.d'
 
 import './index.scss'
 
@@ -16,58 +15,67 @@ import './index.scss'
 //
 // #endregion
 
-type PageStateProps = {
-  counter: {
-    num: number
-  }
-}
+// interface OwnProps {
+//   // 父组件要传的prop放这
+//   value: number;
+// }
+// interface OwnState {
+//   // 自己要用的state放这
+// }
 
-type PageDispatchProps = {
-  add: () => void
-  dec: () => void
-  asyncAdd: () => any
-}
+// type IProps = ConnectProps & OwnProps;
 
 type PageOwnProps = {}
 
-type PageState = {}
+type IProps = ConnectProps & ConnectState & PageOwnProps
 
-type IProps = PageStateProps & PageDispatchProps & PageOwnProps
-
-interface Index {
+interface Page {
   props: IProps;
 }
 
+// FIXME: ts
 @connect(({ counter }) => ({
   counter
-}), (dispatch) => ({
-  add () {
-    dispatch(add())
-  },
-  dec () {
-    dispatch(minus())
-  },
-  asyncAdd () {
-    dispatch(asyncAdd())
-  }
 }))
-class Index extends Component {
+class Page extends Component {
   componentWillReceiveProps (nextProps) {
     console.log(this.props, nextProps)
   }
 
   componentWillUnmount () { }
 
-  componentDidShow () { }
+  componentDidShow () {
+    console.log(this.props, 'this.props')
+  }
 
   componentDidHide () { }
+  asyncAdd = () => {
+    this.props.dispatch({
+      type: 'counter/asyncAdd'
+    })
+  }
+  asyncAddSome = () => {
+    this.props.dispatch({
+      type: 'counter/asyncAddSome',
+      payload: {
+        num: 3,
+      },
+    })
+  }
+  asyncMinus = () => {
+    this.props.dispatch({
+      type: 'counter/asyncMinus'
+    })
+  }
 
   render () {
     return (
       <View className='index'>
-        <Button className='add_btn' onClick={this.props.add}>+</Button>
-        <Button className='dec_btn' onClick={this.props.dec}>-</Button>
-        <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>
+        {/* <Button className='add_btn' onClick={this.props.add}>+</Button>
+        <Button className='dec_btn' onClick={this.props.dec}>-</Button> */}
+        <Button className='dec_btn' onClick={this.asyncAdd}>async add</Button>
+        <Button className='dec_btn' onClick={this.asyncAddSome}>async add some</Button>
+        <Button className='dec_btn' onClick={this.asyncMinus}>async minus</Button>
         <View><Text>{this.props.counter.num}</Text></View>
         <View><Text>Hello, World</Text></View>
       </View>
@@ -75,5 +83,5 @@ class Index extends Component {
   }
 }
 
-export default Index
+export default Page
 

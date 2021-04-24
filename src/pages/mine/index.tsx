@@ -1,39 +1,18 @@
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { View } from '@tarojs/components'
-
-type PageStateProps = {
-  counter: {
-    num: number
-  }
-}
-
-type PageDispatchProps = {
-  add: () => void
-  dec: () => void
-  asyncAdd: () => any
-}
+import { ConnectState, ConnectProps } from '../../models/connect.d'
 
 type PageOwnProps = {}
 
-type IProps = PageStateProps & PageDispatchProps & PageOwnProps
+type IProps = ConnectProps & ConnectState & PageOwnProps
 
 interface Index {
   props: IProps;
 }
 
-@connect(({ counter }) => ({
-  counter
-}), (dispatch) => ({
-  add () {
-    dispatch(add())
-  },
-  dec () {
-    dispatch(minus())
-  },
-  asyncAdd () {
-    dispatch(asyncAdd())
-  }
+@connect(({ common }) => ({
+  accessToken: common.accessToken,
 }))
 class Index extends Component {
   componentWillReceiveProps (nextProps) {
@@ -42,13 +21,22 @@ class Index extends Component {
 
   componentWillUnmount () { }
 
-  componentDidShow () { }
+  async componentDidShow () {
+    const res = await this.props.dispatch({
+      type: 'common/saveStorageSync',
+      payload: {
+        accessToken: '1234',
+        isSubscribe: false,
+      },
+    })
+    console.log('res', res)
+   }
 
   componentDidHide () { }
 
   render () {
     return (
-      <View className='index'>
+      <View className='mine'>
         我的
       </View>
     )
