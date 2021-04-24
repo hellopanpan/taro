@@ -1,8 +1,10 @@
 import { AnyAction } from 'redux';
 import { CounterModelState } from './counter';
+import { CommonModelState } from './common';
 import { Dispatch } from 'dva-core';
 export {
   CounterModelState,
+  CommonModelState,
 };
 
 export interface Loading {
@@ -10,11 +12,13 @@ export interface Loading {
   effects: { [key: string]: boolean | undefined };
   models: {
     counter?: boolean;
+    common?: boolean;
   };
 }
 
 export interface ConnectState {
   counter: CounterModelState;
+  common: CommonModelState;
   loading: Loading;
 }
 
